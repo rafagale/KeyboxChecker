@@ -1,0 +1,13 @@
+services:
+  keyleakerbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: keyleakerbot
+    env_file: .env
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100k"
+        max-file: "5"
