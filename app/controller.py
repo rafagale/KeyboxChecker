@@ -49,6 +49,22 @@ class BotRunner(object):
                 await bot.reply_to(message, "File size is too large")
                 return
             await event.keybox_check(bot, message, message.document)
+            
+        @bot.message_handler(content_types=['document'], chat_types=['group', 'supergroup'])
+        async def handle_keybox_group(message: types.Message):
+            if message.document.mime_type not in ['application/xml', 'text/xml']:
+                await bot.reply_to(message, "File format error")
+                return
+            if message.document.file_size > 20 * 1024:
+                await bot.reply_to(message, "File size is too large")
+                return
+
+            reply_message = (
+                f"Analyzing file uploaded by @{message.from_user.username} in the group... "
+                f"🤔 Hope it’s not leaked! If it is, well... I’m just a bot, but I’d be sad. 😢"
+            )
+            await bot.reply_to(message, reply_message)
+            await event.keybox_check(bot, message, message.document)
 
         @bot.message_handler(commands=['check'])
         async def handle_keybox_check(message: types.Message):
