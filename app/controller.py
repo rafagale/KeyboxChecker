@@ -52,8 +52,7 @@ class BotRunner(object):
             
         @bot.message_handler(content_types=['document'], chat_types=['group', 'supergroup'])
         async def handle_keybox_group(message: types.Message):
-            if message.document.mime_type not in ['application/xml', 'text/xml']:
-                await bot.reply_to(message, "File format error")
+            if message.document.mime_type != 'application/xml' and message.document.mime_type != 'text/xml':
                 return
             if message.document.file_size > 20 * 1024:
                 await bot.reply_to(message, "File size is too large")
